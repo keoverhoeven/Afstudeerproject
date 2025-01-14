@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Dashboard</title>
+    <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+</head>
+<body>
+    <h1>Live Dashboard</h1>
+
+    <div class="data">
+        <h3>Gebruiker ID: {{ data['gebruiker_id'] if data else 'Geen data' }}</h3>
+        <p>Oefening ID: {{ data['oefening_id'] if data else 'Geen data' }}</p>
+        <p>Aantal Herhalingen: {{ data['aantal_herhaling'] if data else 'Geen data' }}</p>
+        <p>Start Tijd: {{ data['start_tijd'] if data else 'Geen data' }}</p>
+        <p>Eind Tijd: {{ data['eind_tijd'] if data else 'Geen data' }}</p>
+        <p>Feedback Oefening: {{ data['feedback_oefening'] if data else 'Geen data' }}</p>
+    </div>
+
+</body>
+</html>

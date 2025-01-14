@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oefening Toevoegen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Oefening Toevoegen</h1>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Formulier voor het toevoegen van een oefening -->
+    <form action="{{ url_for('oefening') }}" method="POST">
+        <label for="id">Oefening ID:</label>
+        <input type="text" id="id" name="id" placeholder="Voer oefening ID in" required>
+
+        <label for="oefening">Oefening Naam:</label>
+        <input type="text" id="oefening" name="oefening" placeholder="Voer oefening naam in" required>
+
+        <button type="submit">Toevoegen</button>
+    </form>
+</body>
+</html>
+
+
+
