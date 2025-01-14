@@ -386,8 +386,6 @@ void processEMGData() {
       // OLED-scherm bijwerken als de sessie gestart is
       if (sessionStarted) {
         updateOLED(envelope, repCount);
-        startTijd = getFormattedTime();
-
         // Verzenden van gegevens naar MQTT bij elke update
         String feedback = generateFinalFeedback(repCount, envelope);  // Verplaats deze regel boven de MQTT-aanroep
         sendDataToMQTT(envelope, repCount, feedback);  // Correcte aanroep van de functie
@@ -435,11 +433,7 @@ void checkKeypad() {
       } else {
         // Nieuwe sessie starten
         sessionStarted = true;
-        timeClient.update();  // Update tijd
-        String startTime = getFormattedTime();  // Registreer starttijd
         SerialToUSB.println("Nieuwe sessie gestart.");
-        SerialToUSB.print("Starttijd: ");
-        SerialToUSB.println(startTime);
       }
     }
     // Update de vorige toets
@@ -664,7 +658,19 @@ void setup() {
   }
   Serial.println("Verbonden met Wi-Fi!");
   timeClient.begin();
-  timeClient.update();
+    // Wacht maximaal 10 seconden om de tijd op te halen
+  unsigned long startTime = millis();
+  while (!timeClient.update()) {
+    if (millis() - startTime > 10000) {
+      Serial.println("Kon tijd niet synchroniseren.");
+      break;
+    }
+    delay(500);
+  }
+  
+  // Starttijd opslaan
+  startTijd = getFormattedTime();
+  Serial.println("Systeem klaar!");
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
@@ -679,9 +685,10 @@ void setup() {
 
 
 void loop() {
-  // Synchroniseer de tijd met de NTP-server
-  timeClient.update();
-
+  // Synchroniseer de tijd met de NTP-server alleen als het nodig is
+  if (!timeClient.update()) {
+    timeClient.update();
+  }
   // Haal gebruikersgegevens op als dat nog niet gebeurd is
   if (!dataFetched) {
     getUserDataFromAPI();
@@ -714,4 +721,3 @@ void loop() {
   // Houd MQTT-verbinding actief
   mqttClient.loop();
 }
-
