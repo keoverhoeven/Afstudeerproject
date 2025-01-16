@@ -31,8 +31,12 @@ mqtt_logger.setLevel(logging.DEBUG)
 # ========== CONFIGURATIE ==========
 
 # MQTT Authenticatie
-MQTT_USERNAME = "eindproject"  # Vul hier je gebruikersnaam in
-MQTT_PASSWORD = "W8woord!"  # Vul hier je wachtwoord in
+# Laad de waarden uit het .env-bestand
+load_dotenv()
+
+# Haal de MQTT-authenticatiegegevens op
+MQTT_USERNAME = os.getenv("MQTT_USERNAME")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
 
 # ========== GLOBAL VARIABLES ==========
 
